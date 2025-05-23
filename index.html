@@ -1,22 +1,155 @@
-
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Seni Özledim...</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Nazlım</title>
+<style>
+  body {
+    margin: 0; padding: 0;
+    overflow: hidden;
+    background: linear-gradient(135deg, #5a3f97, #a86aab, #7fc7ff);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+  }
+  h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 8px #000;
+  }
+  #question {
+    font-size: 1.5rem;
+    margin-bottom: 30px;
+    text-shadow: 1px 1px 4px #000;
+  }
+  #buttons button {
+    font-size: 1.2rem;
+    margin: 0 15px;
+    padding: 12px 28px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    color: white;
+    background: linear-gradient(45deg, #9c27b0, #e040fb);
+    box-shadow: 0 0 15px #e040fb;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+  #buttons button:hover {
+    filter: brightness(1.2);
+  }
+  #buttons button#no {
+    background: linear-gradient(45deg, #f44336, #ff7961);
+    box-shadow: 0 0 15px #ff7961;
+    position: absolute;
+  }
+  #note {
+    margin-top: 40px;
+    font-size: 1.4rem;
+    font-style: italic;
+    text-shadow: 1px 1px 4px #000;
+  }
+  .heart {
+    position: absolute;
+    font-size: 24px;
+    animation: floatUp 6s linear infinite;
+    user-select: none;
+  }
+  @keyframes floatUp {
+    0% { transform: translateY(0) scale(1); opacity: 1; }
+    100% { transform: translateY(-600px) scale(0.5); opacity: 0; }
+  }
+  /* Mavi çiçek animasyonu */
+  .flower {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background: radial-gradient(circle at center, #7fc7ff 0%, #4a90e2 100%);
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    box-shadow:
+      10px 0 0 #7fc7ff,
+      -10px 0 0 #7fc7ff,
+      0 10px 0 #7fc7ff,
+      0 -10px 0 #7fc7ff,
+      7px 7px 0 #4a90e2,
+      -7px 7px 0 #4a90e2,
+      7px -7px 0 #4a90e2,
+      -7px -7px 0 #4a90e2;
+    animation: bloom 4s ease-in-out infinite;
+    opacity: 0.8;
+  }
+  @keyframes bloom {
+    0%, 100% { transform: scale(0.8) rotate(0deg); opacity: 0.6; }
+    50% { transform: scale(1.2) rotate(15deg); opacity: 1; }
+  }
+</style>
 </head>
 <body>
-    <div class="container">
-        <h1>Seni özledim… Tekrar birlikte olalım mı?</h1>
-        <div class="buttons">
-            <button id="yesBtn">Evet</button>
-            <button id="noBtn">Hayır</button>
-        </div>
-        <p id="message" class="hidden">Seni çok seviyorum, seni unutamıyorum.</p>
-        <div class="hearts" id="heartsContainer"></div>
-    </div>
-    <script src="script.js"></script>
+<h1>Nazlım</h1>
+<div id="question">Sen de beni özledin mi?</div>
+<div id="buttons">
+  <button id="yes">Evet</button>
+  <button id="no">Hayır</button>
+</div>
+<div id="note" style="display:none;">Seni çok seviyorum 💜</div>
+
+<script>
+  const yesBtn = document.getElementById('yes');
+  const noBtn = document.getElementById('no');
+  const question = document.getElementById('question');
+  const note = document.getElementById('note');
+  let yesClicks = 0;
+
+  // Hayır butonu kaçıyor
+  noBtn.addEventListener('mouseenter', () => {
+    const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+    const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+    noBtn.style.position = 'absolute';
+    noBtn.style.left = x + 'px';
+    noBtn.style.top = y + 'px';
+  });
+
+  yesBtn.addEventListener('click', () => {
+    yesClicks++;
+    if (yesClicks === 1) {
+      question.textContent = "Sen de beni özledin mi?";
+    } else if (yesClicks === 2) {
+      question.textContent = "Emin misin?";
+    } else if (yesClicks >= 3) {
+      question.style.display = 'none';
+      yesBtn.style.display = 'none';
+      noBtn.style.display = 'none';
+      note.style.display = 'block';
+      createHeartsAndFlowers();
+    }
+  });
+
+  // Kalp ve çiçek animasyonu
+  function createHeartsAndFlowers() {
+    const colors = ['#D291BC', '#957DAD', '#B5EAEA', '#6B4226', '#FF6F61'];
+    setInterval(() => {
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+      heart.style.color = colors[Math.floor(Math.random() * colors.length)];
+      heart.style.left = Math.random() * window.innerWidth + 'px';
+      heart.style.bottom = '0px';
+      heart.textContent = '❤';
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 6000);
+
+      const flower = document.createElement('div');
+      flower.classList.add('flower');
+      flower.style.left = Math.random() * window.innerWidth + 'px';
+      flower.style.bottom = '0px';
+      document.body.appendChild(flower);
+      setTimeout(() => flower.remove(), 4000);
+    }, 300);
+  }
+</script>
 </body>
 </html>
